@@ -106,8 +106,6 @@ function NewItemPageContent() {
     e.preventDefault()
     setIsLoading(true)
 
-    console.log("🔍 Form submission started")
-    console.log("🔍 Current state:", { category, subcategory, location })
 
     // Get form data
     const formData = new FormData(e.currentTarget)
@@ -122,7 +120,6 @@ function NewItemPageContent() {
     const deliveryAvailable = formData.get("deliveryAvailable") === "on"
     const pickupAvailable = formData.get("pickupAvailable") === "on"
 
-    console.log("🔍 Form data:", { title, description, price, category, subcategory, location })
 
     // Validate required fields
     if (!title || !category || !description || !price || !location) {
@@ -133,7 +130,6 @@ function NewItemPageContent() {
       if (!price) missing.push('price')
       if (!location) missing.push('location')
       
-      console.log("❌ Missing fields:", missing)
       toast({
         title: "Error",
         description: `Please fill in all required fields: ${missing.join(', ')}`,
@@ -199,7 +195,6 @@ function NewItemPageContent() {
         booked_dates: []
       }
 
-      console.log('Creating item with data:', itemData);
 
       const response = await fetch('/api/items', {
         method: 'POST',
@@ -215,7 +210,6 @@ function NewItemPageContent() {
       }
 
       const newItem = await response.json()
-      console.log('Item created successfully:', newItem);
 
       toast({
         title: "Item listed successfully!",
@@ -280,17 +274,10 @@ function NewItemPageContent() {
           description: "Please wait while we upload your images.",
         });
 
-        console.log('🚀 Starting image upload process...', { fileCount: files.length });
 
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
-        });
-
-        console.log('📡 Upload response received:', { 
-          status: response.status, 
-          statusText: response.statusText,
-          ok: response.ok 
         });
 
         if (!response.ok) {
@@ -300,14 +287,10 @@ function NewItemPageContent() {
         }
 
         const result = await response.json();
-        console.log('✅ Upload result:', result);
         
         const newImageUrls = result.images.map((img: any) => img.url);
-        console.log('🖼️ Extracted image URLs:', newImageUrls);
         
-        console.log('📋 Current images state before update:', images);
         setImages([...images, ...newImageUrls]);
-        console.log('📋 New images state after update:', [...images, ...newImageUrls]);
         
         toast({
           title: "Images uploaded",

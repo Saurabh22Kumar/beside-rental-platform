@@ -1,0 +1,73 @@
+name: Question
+description: Ask a question about the project
+title: "[QUESTION] "
+labels: ["question", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your question! Please provide as much detail as possible.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What is your question?
+      description: Please describe your question in detail.
+      placeholder: I would like to know...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: What type of question is this?
+      options:
+        - Usage/How-to
+        - Configuration
+        - Deployment
+        - Development
+        - API/Integration
+        - Other
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any additional context that might help us answer your question.
+      placeholder: |
+        - What are you trying to accomplish?
+        - What have you already tried?
+        - Any relevant environment details?
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Any documentation, links, or examples you've already consulted.
+      placeholder: I've already checked...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission checklist
+      description: Please confirm you've done the following
+      options:
+        - label: I have searched existing issues and discussions
+          required: true
+        - label: I have checked the project documentation
+          required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

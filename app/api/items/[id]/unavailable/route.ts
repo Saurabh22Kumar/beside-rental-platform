@@ -4,10 +4,10 @@ import { supabase } from '@/lib/supabase';
 // GET - Fetch unavailable dates for an item
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     
     // Fetch the item's booked_dates array which contains all unavailable dates
     const { data: item, error } = await supabase
@@ -47,14 +47,13 @@ export async function GET(
 // POST - Add unavailable dates (for owners)
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { ownerEmail, dates, isRecurring, recurringType } = body;
 
-    console.log('POST request to unavailable dates:', { id, ownerEmail, dates, isRecurring, recurringType });
 
     if (!ownerEmail || !dates || !Array.isArray(dates)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -80,7 +79,6 @@ export async function POST(
     const currentBookedDates = item.booked_dates || [];
     const allDates = [...new Set([...currentBookedDates, ...dates])];
 
-    console.log('Updating booked_dates from', currentBookedDates, 'to', allDates);
 
     // Update the item's booked_dates array
     const { data, error } = await supabase
@@ -123,10 +121,10 @@ export async function POST(
 // DELETE - Remove unavailable dates (for owners)
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { ownerEmail, dates } = body;
 
@@ -154,7 +152,6 @@ export async function DELETE(
     const currentBookedDates = item.booked_dates || [];
     const updatedDates = currentBookedDates.filter((date: string) => !dates.includes(date));
 
-    console.log('Removing dates', dates, 'from', currentBookedDates, 'result:', updatedDates);
 
     // Update the item's booked_dates array
     const { error } = await supabase

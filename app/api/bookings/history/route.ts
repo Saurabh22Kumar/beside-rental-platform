@@ -11,7 +11,6 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'User email is required' }, { status: 400 });
     }
 
-    console.log('Fetching booking history for user:', userEmail);
 
     // Fetch bookings where user is the renter (products they booked from others)
     const { data: userBookings, error: userBookingsError } = await supabase

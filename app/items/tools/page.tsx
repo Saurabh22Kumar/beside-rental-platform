@@ -46,7 +46,6 @@ function ToolsPageWrapper() {
     
     // Listen for booking updates
     const handleRefreshData = () => {
-      console.log('Booking dates updated, refreshing tools page data...')
       fetchItems()
     }
     

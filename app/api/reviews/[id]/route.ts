@@ -4,9 +4,10 @@ import { supabase } from '@/lib/supabase';
 // GET - Fetch reviews for an item
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -20,7 +21,7 @@ export async function GET(
       const { data: statsData, error: statsError } = await supabase
         .from('reviews')
         .select('rating')
-        .eq('item_id', params.id);
+        .eq('item_id', id);
 
       if (statsError) {
         console.error('Error fetching review stats:', statsError);
@@ -51,7 +52,7 @@ export async function GET(
     let query = supabase
       .from('reviews')
       .select('*')
-      .eq('item_id', params.id);
+      .eq('item_id', id);
 
     // Apply rating filter if specified
     if (rating && rating !== 'all') {
@@ -87,7 +88,7 @@ export async function GET(
     const { count, error: countError } = await supabase
       .from('reviews')
       .select('*', { count: 'exact', head: true })
-      .eq('item_id', params.id);
+      .eq('item_id', id);
 
     if (countError) {
       console.error('Error counting reviews:', countError);
@@ -96,10 +97,9 @@ export async function GET(
 
     // Calculate rating statistics
     const { data: ratingStats, error: statsError } = await supabase
-      .rpc('get_rating_distribution', { item_uuid: params.id });
+      .rpc('get_rating_distribution', { item_uuid: id });
 
     if (statsError) {
-      console.log('Rating stats function not available, calculating manually');
     }
 
     // Process reviews to include helpful vote counts and reviewer info
@@ -136,9 +136,10 @@ export async function GET(
 // POST - Create a new review (only for users with completed bookings)
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { 
       bookingId, 
@@ -167,7 +168,7 @@ export async function POST(
       .from('bookings')
       .select('*')
       .eq('id', bookingId)
-      .eq('item_id', params.id)
+      .eq('item_id', id)
       .eq('renter_email', reviewerEmail)
       .eq('status', 'completed')
       .single();
@@ -195,7 +196,7 @@ export async function POST(
     const { data: review, error: reviewError } = await supabase
       .from('reviews')
       .insert({
-        item_id: params.id,
+        item_id: id,
         booking_id: bookingId,
         reviewer_email: reviewerEmail,
         owner_email: booking.owner_email,
@@ -222,7 +223,6 @@ export async function POST(
       .single();
 
     if (detailsError) {
-      console.log('Could not fetch reviewer details, returning basic review');
     }
 
     return NextResponse.json({ 
@@ -238,9 +238,10 @@ export async function POST(
 // PUT - Update a review (only by the reviewer)
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { 
       reviewId,
@@ -269,7 +270,7 @@ export async function PUT(
       .from('reviews')
       .select('*')
       .eq('id', reviewId)
-      .eq('item_id', params.id)
+      .eq('item_id', id)
       .eq('reviewer_email', reviewerEmail)
       .single();
 
@@ -313,9 +314,10 @@ export async function PUT(
 // DELETE - Delete a review (only by the reviewer)
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { searchParams } = new URL(request.url);
     const reviewId = searchParams.get('reviewId');
     const reviewerEmail = searchParams.get('reviewerEmail');
@@ -331,7 +333,7 @@ export async function DELETE(
       .from('reviews')
       .select('*')
       .eq('id', reviewId)
-      .eq('item_id', params.id)
+      .eq('item_id', id)
       .eq('reviewer_email', reviewerEmail)
       .single();
 

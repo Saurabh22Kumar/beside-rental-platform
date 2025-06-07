@@ -3,8 +3,6 @@ import { uploadToCloudinary, uploadMultipleToCloudinary } from '@/lib/cloudinary
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🚀 Upload API called');
-    console.log('📋 Content-Type:', request.headers.get('content-type'));
     
     const contentType = request.headers.get('content-type');
     
@@ -20,13 +18,6 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const files = formData.getAll('images') as File[];
     const folder = (formData.get('folder') as string) || 'rental-platform';
-
-    console.log('📁 Upload request details:', { 
-      fileCount: files.length, 
-      folder,
-      fileNames: files.map(f => f.name),
-      fileSizes: files.map(f => f.size)
-    });
 
     if (!files || files.length === 0) {
       return NextResponse.json(
@@ -87,8 +78,6 @@ export async function POST(request: NextRequest) {
 // Handle single image upload for profile photos
 export async function PUT(request: NextRequest) {
   try {
-    console.log('🚀 Profile Upload API called');
-    console.log('📋 Content-Type:', request.headers.get('content-type'));
     
     const contentType = request.headers.get('content-type');
     

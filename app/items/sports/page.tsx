@@ -187,7 +187,6 @@ export default function SportsPage() {
     
     // Listen for booking updates
     const handleRefreshData = () => {
-      console.log('Booking dates updated, refreshing sports page data...')
       fetchItems()
     }
     

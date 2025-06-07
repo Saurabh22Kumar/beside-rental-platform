@@ -4,9 +4,12 @@ import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 
 interface ReviewSubmissionFormProps {
-  itemId: string;
+  itemId?: string;
   userEmail: string;
+  preSelectedBookingId?: string;
   onReviewSubmitted?: () => void;
+  onSubmitted?: () => void;
+  onCancel?: () => void;
 }
 
 interface ReviewableBooking {
@@ -21,7 +24,10 @@ interface ReviewableBooking {
 export default function ReviewSubmissionForm({ 
   itemId, 
   userEmail, 
-  onReviewSubmitted 
+  preSelectedBookingId,
+  onReviewSubmitted,
+  onSubmitted,
+  onCancel
 }: ReviewSubmissionFormProps) {
   const [reviewableBookings, setReviewableBookings] = useState<ReviewableBooking[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<string>('');

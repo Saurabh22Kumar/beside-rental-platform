@@ -29,8 +29,6 @@ const isCloudinaryConfigured = !!(
 const uploadFallback = async (
   folder: string = 'rental-platform'
 ): Promise<{ url: string; publicId: string }> => {
-  console.log('📝 Development mode: Using placeholder image URLs');
-  console.log('🔧 To enable real uploads, add Cloudinary credentials to .env.local');
   
   // Simulate upload delay
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -58,7 +56,6 @@ export const uploadToCloudinary = async (
   try {
     // Check if Cloudinary is configured
     if (!isCloudinaryConfigured) {
-      console.log('🔄 Cloudinary not configured, using development fallback');
       return uploadFallback(folder);
     }
 
@@ -73,7 +70,6 @@ export const uploadToCloudinary = async (
       uploadData = `data:image/jpeg;base64,${base64}`;
     }
 
-    console.log('🔄 Attempting Cloudinary upload...');
     
     // Upload to Cloudinary with optimizations and timeout
     const uploadPromise = cloudinary.uploader.upload(uploadData, {
@@ -93,7 +89,6 @@ export const uploadToCloudinary = async (
 
     const result = await Promise.race([uploadPromise, timeoutPromise]) as any;
 
-    console.log('✅ Cloudinary upload successful:', result.secure_url);
     return {
       url: result.secure_url,
       publicId: result.public_id
@@ -103,7 +98,6 @@ export const uploadToCloudinary = async (
     console.error('Cloudinary upload error:', error);
     
     // Fallback to development mode on any error
-    console.log('🔄 Error occurred, using development fallback');
     return uploadFallback(folder);
   }
 };
@@ -116,7 +110,6 @@ export const deleteFromCloudinary = async (publicId: string): Promise<void> => {
   try {
     // Check if Cloudinary is configured
     if (!isCloudinaryConfigured) {
-      console.log('🔄 Development mode: Simulated image deletion for', publicId);
       return;
     }
 
@@ -124,7 +117,6 @@ export const deleteFromCloudinary = async (publicId: string): Promise<void> => {
   } catch (error) {
     console.error('Cloudinary delete error:', error);
     // In development mode, just log and continue
-    console.log('🔄 Error occurred, simulating success in development mode');
   }
 };
 

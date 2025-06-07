@@ -51,17 +51,9 @@ export const useImageUpload = (options: UseImageUploadOptions = {}) => {
 
       formData.append('folder', folder);
 
-      console.log('🚀 Starting image upload...', { fileCount: files.length, folder });
-      
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
-      });
-
-      console.log('📡 Upload response received:', { 
-        status: response.status, 
-        statusText: response.statusText,
-        ok: response.ok 
       });
 
       if (!response.ok) {
@@ -71,7 +63,6 @@ export const useImageUpload = (options: UseImageUploadOptions = {}) => {
       }
 
       const result = await response.json();
-      console.log('✅ Upload result:', result);
       
       toast({
         title: "Upload successful",

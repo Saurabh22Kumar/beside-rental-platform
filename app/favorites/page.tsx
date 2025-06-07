@@ -21,11 +21,9 @@ export default function FavoritesPage() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        console.log('Fetching items from API...')
         const response = await fetch('/api/items')
         if (response.ok) {
           const items = await response.json()
-          console.log('Fetched items:', items.length, 'items')
           // Set allItems as array directly
           setAllItems(Array.isArray(items) ? items : [])
         } else {
@@ -62,7 +60,6 @@ export default function FavoritesPage() {
           const res = await fetch(`/api/users/${encodeURIComponent(user.email)}/favorites`)
           if (res.ok) {
             const data = await res.json()
-            console.log('Fetched favorites:', data.favorites)
             setFavoriteIds(data.favorites || [])
           } else {
             console.error('Failed to fetch favorites:', res.status)
@@ -76,7 +73,6 @@ export default function FavoritesPage() {
         // Always set to [] if no localStorage favorites (prevents stale state)
         const favs = localStorage.getItem("favorites")
         const favoritesList = favs ? JSON.parse(favs) : []
-        console.log('Local storage favorites:', favoritesList)
         setFavoriteIds(favoritesList)
       }
     }
@@ -101,18 +97,15 @@ export default function FavoritesPage() {
 
   useEffect(() => {
     // Get item details for all favorite IDs
-    console.log('Mapping favorites - favoriteIds:', favoriteIds, 'allItems:', typeof allItems, 'isArray:', Array.isArray(allItems), 'loading:', loading)
     
     // Don't process if still loading or allItems is not a valid array
     if (loading || !Array.isArray(allItems) || allItems.length === 0) {
-      console.log('Skipping mapping - loading:', loading, 'allItems valid:', Array.isArray(allItems), 'count:', allItems.length)
       return
     }
     
     const favItems = favoriteIds
       .map((id) => allItems.find((item: any) => item.id === id))
       .filter(Boolean)
-    console.log('Found favorite items:', favItems.length)
     setFavorites(favItems)
   }, [favoriteIds, allItems, loading])
 

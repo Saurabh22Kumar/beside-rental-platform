@@ -23,16 +23,8 @@ export type User = {
   updatedAt?: Date;
 };
 
-// Import user data from JSON file
-import usersData from './users.json';
-
-// Convert the imported data to User objects with proper Date types
-let users: User[] = usersData.map((user: any) => ({
-  ...user,
-  createdAt: new Date(user.createdAt),
-  updatedAt: user.updatedAt ? new Date(user.updatedAt) : undefined,
-  favorites: user.favorites || []
-}));
+// Initialize with an empty array for development
+let users: User[] = [];
 
 export function getUserByEmail(email: string): User | undefined {
   return users.find((u) => u.email === email);

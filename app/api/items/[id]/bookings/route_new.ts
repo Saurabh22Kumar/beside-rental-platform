@@ -18,11 +18,10 @@ function generateDateRange(startDate: string, endDate: string): string[] {
 // GET - Fetch bookings and unavailable dates for an item
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
-    console.log('GET bookings for item:', id);
+    const { id } = await params;
 
     // Fetch bookings from database
     const { data: bookings, error: bookingsError } = await supabase
@@ -71,14 +70,13 @@ export async function GET(
 // POST - Create a new booking request
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { userEmail, ownerEmail, startDate, endDate } = body;
 
-    console.log('POST booking request:', { id, userEmail, ownerEmail, startDate, endDate });
 
     // Validate required fields
     if (!userEmail || !ownerEmail || !startDate || !endDate) {
@@ -144,14 +142,13 @@ export async function POST(
 // PUT - Update booking status (approve/reject)
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { bookingId, status, ownerEmail } = body;
 
-    console.log('PUT booking status update:', { id, bookingId, status, ownerEmail });
 
     // Validate required fields
     if (!bookingId || !status || !ownerEmail) {

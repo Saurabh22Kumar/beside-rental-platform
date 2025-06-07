@@ -18,15 +18,14 @@ function generateDateRange(startDate: string, endDate: string): string[] {
 // GET - Fetch bookings and unavailable dates for an item
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const url = new URL(request.url);
     const userEmail = url.searchParams.get('userEmail');
     const ownerEmail = url.searchParams.get('ownerEmail');
     
-    console.log('GET bookings for item:', id, 'User:', userEmail, 'Owner:', ownerEmail);
 
     // Fetch all bookings (simplified without phone join for now)
     const { data: allBookings, error: bookingsError } = await supabase
@@ -100,14 +99,13 @@ export async function GET(
 // POST - Create a new booking request
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { userEmail, ownerEmail, startDate, endDate } = body;
 
-    console.log('POST booking request:', { id, userEmail, ownerEmail, startDate, endDate });
 
     // Validate required fields
     if (!userEmail || !ownerEmail || !startDate || !endDate) {
@@ -203,14 +201,13 @@ export async function POST(
 // PUT - Update booking status (approve/reject/cancel)
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { bookingId, status, ownerEmail, userEmail } = body;
 
-    console.log('PUT booking status update:', { id, bookingId, status, ownerEmail, userEmail });
 
     // Validate required fields
     if (!bookingId || !status) {
@@ -405,7 +402,6 @@ async function sendBookingStatusNotification(
 
   // Log notifications (in a real app, you would send emails/push notifications)
   notifications.forEach(notification => {
-    console.log(`📧 Notification sent to ${notification.to}: ${notification.message}`);
   });
 
   // TODO: Implement actual notification sending

@@ -195,7 +195,6 @@ export default function ReviewPrompt({ userEmail, onReviewSubmitted }: ReviewPro
                 size="sm"
                 onClick={() => {
                   // This could navigate to a dedicated reviews page
-                  console.log('Show all reviewable bookings');
                 }}
               >
                 View All ({reviewableBookings.length - 3} more)

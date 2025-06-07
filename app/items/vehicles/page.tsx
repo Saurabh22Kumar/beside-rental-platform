@@ -187,7 +187,6 @@ export default function VehiclesPage() {
     
     // Listen for booking updates
     const handleRefreshData = () => {
-      console.log('Booking dates updated, refreshing vehicles page data...')
       fetchItems()
     }
     

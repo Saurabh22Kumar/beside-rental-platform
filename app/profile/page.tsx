@@ -55,9 +55,6 @@ export default function ProfilePage() {
 
   // Debug auth status
   useEffect(() => {
-    console.log("Auth status - isAuthenticated:", isAuthenticated);
-    console.log("Auth status - isLoading:", authLoading);
-    console.log("Auth user data:", authUser);
   }, [authUser, authLoading, isAuthenticated]);
 
   useEffect(() => {
@@ -71,11 +68,9 @@ export default function ProfilePage() {
     if (!authUser?.email) return;
     
     try {
-      console.log("Fetching user data for:", authUser.email);
       const res = await fetch(`/api/users/${encodeURIComponent(authUser.email)}`);
       const data = await res.json();
       
-      console.log("User data received:", data);
       if (!data.error) {
         setUser(data);
         // Calculate days since joining

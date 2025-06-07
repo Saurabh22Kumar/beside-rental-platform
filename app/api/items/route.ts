@@ -36,12 +36,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    console.log('Environment check:', {
-      hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-      serviceKeyLength: process.env.SUPABASE_SERVICE_ROLE_KEY?.length,
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL
-    });
-    
     // Validate required fields
     const requiredFields = ['title', 'description', 'category', 'price', 'location', 'owner_email'];
     const missingFields = requiredFields.filter(field => !body[field]);
@@ -71,7 +65,6 @@ export async function POST(request: NextRequest) {
     };
 
     // Use regular client (admin client has invalid key issue)
-    console.log('Creating item with regular client...');
     const { data: item, error } = await supabase
       .from('items')
       .insert([itemData])

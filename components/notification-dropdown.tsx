@@ -97,7 +97,6 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   const sendNotificationToRequester = async (booking: BookingNotification, action: 'confirmed' | 'rejected') => {
     // This would typically send an email or push notification
     // For now, we'll just log it
-    console.log(`Notification sent to ${booking.renter_email}: Booking ${action} for ${booking.item_title}`);
     
     // TODO: Implement actual notification sending
     // - Email notification

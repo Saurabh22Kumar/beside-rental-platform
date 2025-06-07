@@ -10,7 +10,6 @@ export async function GET(request: Request) {
 
     if (ownerEmail) {
       // Fetch pending requests for items owned by this user
-      console.log('Fetching notifications for owner:', ownerEmail);
 
       // First, get all items owned by this user
       const { data: items, error: itemsError } = await supabase
@@ -53,7 +52,6 @@ export async function GET(request: Request) {
         .in('email', renterEmails);
 
       if (profilesError) {
-        console.log('Warning: Could not fetch profiles:', profilesError);
       }
 
       // Combine booking data with item and profile details
@@ -78,7 +76,6 @@ export async function GET(request: Request) {
 
     if (requesterEmail) {
       // Fetch all booking requests made by this user
-      console.log('Fetching booking requests for requester:', requesterEmail);
 
       const { data: bookings, error: bookingsError } = await supabase
         .from('bookings')

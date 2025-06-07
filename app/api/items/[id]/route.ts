@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     
     // Fetch single item by ID from Supabase
     const { data: item, error } = await supabase
@@ -46,7 +46,6 @@ export async function GET(
             const parsed = JSON.parse(ownerData.bio);
             additionalData = parsed || {};
           } catch (e) {
-            console.log('Could not parse bio data for user:', ownerData.email);
           }
         }
 
@@ -82,10 +81,10 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     
     // Delete item by ID from Supabase
     const { error } = await supabase
@@ -107,10 +106,10 @@ export async function DELETE(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     
     // Extract updateable fields (only fields that exist in the database)

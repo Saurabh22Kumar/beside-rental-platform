@@ -40,7 +40,6 @@ export default function ItemsPage() {
     
     // Listen for booking updates
     const handleRefreshData = () => {
-      console.log('Booking dates updated, refreshing main items page data...')
       fetchItems() // Refresh items from API
     }
     
