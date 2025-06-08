@@ -2,6 +2,12 @@
 
 A modern, feature-rich rental platform built with Next.js, Supabase, and Cloudinary. Users can list items for rent, browse available items, manage bookings, and handle transactions seamlessly.
 
+## 🌐 Live Demo
+
+**🚀 [View Live Application](https://beside-rental-platform-mxcqgwul3.vercel.app)**
+
+Experience the platform in action! The live demo showcases all features including user authentication, item listings, booking system, and more.
+
 ## 🚀 Features
 
 ### Core Functionality
