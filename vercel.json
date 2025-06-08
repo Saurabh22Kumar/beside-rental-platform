@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "beside-rental-platform",
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
